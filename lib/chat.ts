@@ -1,3 +1,5 @@
+import { compressImage } from './compress-image'
+
 export const MAX_IMAGES = 3
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 export const ACCEPTED_IMAGE_TYPES = 'image/jpeg,image/png,image/webp,image/heic,image/heif'
@@ -19,7 +21,8 @@ export async function sendChat(message: string, images: File[], history: ChatMes
       history.filter((m) => !m.isError && m.text).map((m) => ({ role: m.role, text: m.text })),
     ),
   )
-  images.forEach((image) => formData.append('images', image))
+  const compressed = await Promise.all(images.map(compressImage))
+  compressed.forEach((image) => formData.append('images', image))
 
   const response = await fetch('/api/chat', { method: 'POST', body: formData })
   const data = await response.json().catch(() => null)
