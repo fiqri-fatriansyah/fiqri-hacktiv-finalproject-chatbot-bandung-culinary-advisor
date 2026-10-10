@@ -1,0 +1,12 @@
+packages:
+  - backend
+
+pmOnFail: ignore
+
+minimumReleaseAgeExclude:
+  - '@next/*'
+  - next
+
+allowBuilds:
+  '@google/genai': false
+  protobufjs: false
