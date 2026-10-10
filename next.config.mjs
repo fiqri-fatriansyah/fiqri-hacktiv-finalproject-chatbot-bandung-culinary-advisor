@@ -1,12 +1,3 @@
-const isVercel = Boolean(process.env.VERCEL)
-const backendUrl = (process.env.BACKEND_URL ?? (isVercel ? '' : 'http://localhost:4000')).replace(/\/+$/, '')
-
-if (!backendUrl) {
-  console.warn(
-    '[next.config] BACKEND_URL is not set. Set it to the deployed NestJS backend URL (e.g. https://your-backend.vercel.app) or /api/chat will 404.',
-  )
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -15,15 +6,15 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  async rewrites() {
-    if (!backendUrl) return []
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${backendUrl}/api/:path*`,
-      },
-    ]
-  },
+  // Nest lazy-loads optional packages at runtime; bundling breaks that.
+  serverExternalPackages: [
+    '@nestjs/core',
+    '@nestjs/common',
+    '@nestjs/platform-express',
+    'express',
+    'multer',
+    '@google/genai',
+  ],
   async headers() {
     return [
       {

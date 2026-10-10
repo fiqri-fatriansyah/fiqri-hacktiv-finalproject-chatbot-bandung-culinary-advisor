@@ -3,20 +3,21 @@ import {
   Body,
   Controller,
   HttpCode,
+  Inject,
   Post,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { ChatService, type HistoryTurn } from './chat.service.js';
+import { ChatService, type HistoryTurn } from './chat.service';
 import {
   ALLOWED_IMAGE_TYPES,
   MAX_HISTORY_TURNS,
   MAX_IMAGES,
   MAX_IMAGE_BYTES,
   MAX_MESSAGE_LENGTH,
-} from './chat.constants.js';
+} from './chat.constants';
 
 interface ChatBody {
   message?: string;
@@ -46,7 +47,7 @@ function parseHistory(raw: string | undefined): HistoryTurn[] {
 
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+  constructor(@Inject(ChatService) private readonly chatService: ChatService) {}
 
   @Post()
   @HttpCode(200)

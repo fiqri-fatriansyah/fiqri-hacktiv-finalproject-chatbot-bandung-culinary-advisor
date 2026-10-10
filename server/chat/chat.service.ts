@@ -4,7 +4,7 @@ import {
   BadGatewayException,
 } from '@nestjs/common';
 import { GoogleGenAI, ThinkingLevel, type Content, type Part } from '@google/genai';
-import { REFUSAL_TEXT, SYSTEM_INSTRUCTION } from './chat.constants.js';
+import { REFUSAL_TEXT, SYSTEM_INSTRUCTION } from './chat.constants';
 
 export interface HistoryTurn {
   role: 'user' | 'model';
